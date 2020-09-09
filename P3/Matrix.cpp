@@ -3,49 +3,49 @@
 using namespace std;
 
 int **init(int n) {
-    int **mat = new int *[n];
+    int **out = new int *[n];
     for (int i = 0; i < n; i++)
-        mat[i] = new int[n];
+        out[i] = new int[n];
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            mat[i][j] = 0;
-    return mat;
+            out[i][j] = 0;
+    return out;
 }
 
 int **input(int n) {
     cout << endl;
-    int **mat = init(n);
+    int **out = init(n);
     cout << "Enter values: " << endl;
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            cin >> mat[i][j];
-    return mat;
+            cin >> out[i][j];
+    return out;
 }
 
-void print(int **mat, int n) {
+void print(int **m, int n) {
     cout << endl << "Matrix is" << endl;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++)
-            cout << mat[i][j] << " ";
+            cout << m[i][j] << " ";
         cout << endl;
     }
     cout << endl;
 }
 
 int **add(int **x, int **y, int n) {
-    int **c = init(n);
+    int **out = init(n);
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            c[i][j] = x[i][j] + y[i][j];
-    return c;
+            out[i][j] = x[i][j] + y[i][j];
+    return out;
 }
 
 int **sub(int **x, int **y, int n) {
-    int **c = init(n);
+    int **out = init(n);
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            c[i][j] = x[i][j] - y[i][j];
-    return c;
+            out[i][j] = x[i][j] - y[i][j];
+    return out;
 }
 
 int **combine(int **a, int **b, int **c, int **d, int n) {
@@ -67,31 +67,29 @@ int **combine(int **a, int **b, int **c, int **d, int n) {
 
 int ***split(int **x, int n) {
     n /= 2;
-    int **a = init(n);
-    int **b = init(n);
-    int **c = init(n);
-    int **d = init(n);
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            a[i][j] = x[i][j];
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            b[i][j] = x[i][j + n];
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            c[i][j] = x[i + n][j];
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            d[i][j] = x[i + n][j + n];
     int ***out = new int **[4];
-    out[0] = a;
-    out[1] = b;
-    out[2] = c;
-    out[3] = d;
+    out[0] = init(n);
+    out[1] = init(n);
+    out[2] = init(n);
+    out[3] = init(n);
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            out[0][i][j] = x[i][j];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            out[1][i][j] = x[i][j + n];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            out[2][i][j] = x[i + n][j];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            out[3][i][j] = x[i + n][j + n];
     return out;
 }
 
 int **mult(int **x, int **y, int n) {
+    // Todo
+    // Free the memory
     if (n == 1) {
         int **out = init(n);
         out[0][0] = x[0][0] * y[0][0];
@@ -115,23 +113,7 @@ int **mult(int **x, int **y, int n) {
     int **k = add(p3, p4, n);
     int **l = sub(add(p1, p5, n), add(p3, p7, n), n);
 
-    int **out = combine(i, j, k, l, n);
-
-    free(s1);
-    free(s2);
-    free(p1);
-    free(p2);
-    free(p3);
-    free(p4);
-    free(p5);
-    free(p6);
-    free(p7);
-    free(i);
-    free(j);
-    free(k);
-    free(l);
-
-    return out;
+    return combine(i, j, k, l, n);
 }
 
 int main() {
